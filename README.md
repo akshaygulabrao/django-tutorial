@@ -56,6 +56,52 @@ If you get an error like me, make sure you do the steps that you document instea
 
 Okay, it was me.
 
+## Part2
+
+### Database setup
+In **mysite/settings.py** we may decide to change the database type. None of it really applies to us (yet), but it may soon.
+
+### Creating models
+
+A model is the single, definitive source of information about your data. It contains the essential fields and behaviors of the data you're storing. In the **polls/models.py** we create two models:
+    from django.db import models
+
+
+    class Question(models.Model):
+        question_text = models.CharField(max_length=200)
+        pub_date = models.DateTimeField('date published')
+
+
+    class Choice(models.Model):
+        question = models.ForeignKey(Question, on_delete=models.CASCADE)
+        choice_text = models.CharField(max_length=200)
+        votes = models.IntegerField(default=0)
+
+### Activating Models
+We need to tell our project that the **polls** app is installed. In **mysite/settings.py**
+
+
+    INSTALLED_APPS = [
+        'polls.apps.PollsConfig',
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+    ]
+Now we need to run:
+    python manage.py makemigrations polls
+
+By running **makemigrations**, you're telling Django that you've made some changes to your models (in this case, you've made new ones) and that you'd like the changes to be stored as a migration.  
+The **sqlmigrate** command takes migration names and returns their SQL:
+    python manage.py sqlmigrate polls 001
+    python manage.py migrate
+
+### Introducting the Django Admin
+Generating admin sites is pretty easy, so Django automates this.
+
+
 
 # Contact Me
 818-518-8295  
